@@ -1,0 +1,45 @@
+name: Deploy Next.js to S3
+
+on:
+  push:
+    branches:
+      - main  # or your default branch
+
+env:
+  AWS_REGION: us-east-1  # Change to your region
+  S3_BUCKET: your-bucket-name  # Change to your bucket name
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'  # Adjust based on your Node.js version
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Next.js app
+        run: npm run build
+        env:
+          NODE_ENV: production
+
+      - name: Export Next.js app
+        run: npm run export
+
+      - name: Upload to S3
+        run: |
+          aws s3 sync ./out s3://${{ env.S3_BUCKET }} --delete
