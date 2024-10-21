@@ -8,6 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 
 // Replace this with your actual API Gateway invoke URL
 const API_GATEWAY_URL = 'https://8fslio82w8.execute-api.us-east-1.amazonaws.com/Prod'
+
 // Define types for our data structures
 type LoginData = {
   user_id: string;
@@ -19,10 +20,10 @@ type PatientData = {
   last_name: string;
   dob: string;
   phone: string;
-  weight: string;
-  sugar_level: string;
-  blood_level: string;
-  prescription: string;
+  weight?: string;
+  sugar_level?: string;
+  blood_level?: string;
+  prescription?: string;
 }
 
 type SearchData = {
@@ -39,18 +40,16 @@ type RecentJob = {
 
 export default function AdminDashboard() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [activeView, setActiveView] = useState('login')
+  const [activeView, setActiveView] = useState<'login' | 'dashboard' | 'register' | 'search' | 'patientDetails'>('login')
   const [loginData, setLoginData] = useState<LoginData>({ user_id: '', password: '' })
   const [patientData, setPatientData] = useState<PatientData>({
-    first_name: '', last_name: '', dob: '', phone: '',
-    weight: '', sugar_level: '', blood_level: '', prescription: ''
+    first_name: '', last_name: '', dob: '', phone: '', weight: '', sugar_level: '', blood_level: '', prescription: ''
   })
   const [searchData, setSearchData] = useState<SearchData>({ first_name: '', last_name: '' })
   const [searchResult, setSearchResult] = useState<PatientData | null>(null)
   const [recentJobs, setRecentJobs] = useState<RecentJob[]>([])
 
   useEffect(() => {
-    // Fetch recent jobs when component mounts
     fetchRecentJobs()
   }, [])
 
@@ -95,8 +94,7 @@ export default function AdminDashboard() {
       if (response.ok) {
         alert('Patient registered successfully')
         setPatientData({
-          first_name: '', last_name: '', dob: '', phone: '',
-          weight: '', sugar_level: '', blood_level: '', prescription: ''
+          first_name: '', last_name: '', dob: '', phone: '', weight: '', sugar_level: '', blood_level: '', prescription: ''
         })
         fetchRecentJobs() // Refresh recent jobs list
       } else {
@@ -269,7 +267,7 @@ export default function AdminDashboard() {
                 value={patientData.prescription}
                 onChange={(e) => setPatientData({ ...patientData, prescription: e.target.value })}
               />
-              <Button type="submit">Register Patient</Button>
+              <Button type="submit">Register</Button>
             </form>
           </CardContent>
         </Card>
@@ -311,47 +309,48 @@ export default function AdminDashboard() {
                 placeholder="First Name"
                 value={searchResult.first_name}
                 onChange={(e) => setSearchResult({ ...searchResult, first_name: e.target.value })}
-                disabled
+                required
               />
               <Input
                 placeholder="Last Name"
                 value={searchResult.last_name}
                 onChange={(e) => setSearchResult({ ...searchResult, last_name: e.target.value })}
-                disabled
+                required
               />
               <Input
+                type="date"
                 placeholder="Date of Birth"
                 value={searchResult.dob}
                 onChange={(e) => setSearchResult({ ...searchResult, dob: e.target.value })}
-                disabled
+                required
               />
               <Input
                 placeholder="Phone Number"
                 value={searchResult.phone}
                 onChange={(e) => setSearchResult({ ...searchResult, phone: e.target.value })}
-                disabled
+                required
               />
               <Input
                 placeholder="Weight"
-                value={searchResult.weight}
+                value={searchResult.weight || ''}
                 onChange={(e) => setSearchResult({ ...searchResult, weight: e.target.value })}
               />
               <Input
                 placeholder="Sugar Level"
-                value={searchResult.sugar_level}
+                value={searchResult.sugar_level || ''}
                 onChange={(e) => setSearchResult({ ...searchResult, sugar_level: e.target.value })}
               />
               <Input
                 placeholder="Blood Level"
-                value={searchResult.blood_level}
+                value={searchResult.blood_level || ''}
                 onChange={(e) => setSearchResult({ ...searchResult, blood_level: e.target.value })}
               />
               <Input
                 placeholder="Prescription"
-                value={searchResult.prescription}
+                value={searchResult.prescription || ''}
                 onChange={(e) => setSearchResult({ ...searchResult, prescription: e.target.value })}
               />
-              <Button type="submit">Update Patient</Button>
+              <Button type="submit">Update</Button>
             </form>
           </CardContent>
         </Card>
