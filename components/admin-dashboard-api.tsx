@@ -7,8 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 // Replace this with your actual API Gateway invoke URL
-const API_GATEWAY_URL = 'https://your-api-gateway-url.execute-api.your-region.amazonaws.com/your-stage'
-
+const API_GATEWAY_URL = 'https://yb6fqp4ugi.execute-api.us-east-1.amazonaws.com/Production'
 // Define types for our data structures
 type LoginData = {
   user_id: string;
