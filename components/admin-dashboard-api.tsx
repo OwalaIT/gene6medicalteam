@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 // Replace this with your actual API Gateway invoke URL
-const API_GATEWAY_URL = 'https://i7dffqu7jh.execute-api.us-east-1.amazonaws.com/dev'
+const API_GATEWAY_URL = 'https://k3aeqzs4bk.execute-api.us-east-1.amazonaws.com/Prod'
 
 // Define types for our data structures
 type LoginData = {
@@ -72,6 +72,7 @@ export default function AdminDashboard() {
         headers: { 'Content-Type': 'application/json' }
       })
       const data = await response.json()
+      console.log('Login response:', data)
       if (response.ok) {
         setIsLoggedIn(true)
         setActiveView('dashboard')
